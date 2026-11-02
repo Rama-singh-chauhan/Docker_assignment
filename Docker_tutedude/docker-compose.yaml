@@ -1,0 +1,46 @@
+# Docker Compose: runs the Flask backend and Express frontend
+# on the same user-defined bridge network ("app-network").
+#
+# Set your Docker Hub username before building/pushing, e.g.
+#   export DOCKERHUB_USERNAME=yourusername     (Linux/macOS)
+#   $env:DOCKERHUB_USERNAME="yourusername"     (PowerShell)
+# or put DOCKERHUB_USERNAME=yourusername in a .env file next to this one.
+
+services:
+  backend:
+    build: ./backend
+    image: ${DOCKERHUB_USERNAME:-ajaykumar}/flask-backend:latest
+    container_name: flask-backend
+    ports:
+      - "5001:5000"
+    environment:
+      - PORT=5000
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: ${DOCKERHUB_USERNAME:-ajaykumar}/express-frontend:latest
+    container_name: express-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      # "backend" is the service name above; Docker's DNS resolves it inside app-network
+      - BACKEND_URL=http://backend:5000
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+
+networks:
+  app-network:
+    driver: bridge

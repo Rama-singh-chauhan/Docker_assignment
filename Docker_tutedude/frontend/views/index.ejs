@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Registration | Express + Flask</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="card">
+    <header>
+      <span class="badge">Express → Flask</span>
+      <h1>Course Registration</h1>
+      <p class="sub">Fill in the form. The Express frontend sends your data to the Flask backend for processing.</p>
+    </header>
+
+    <% if (errors && errors.length) { %>
+      <div class="alert">
+        <strong>Please fix the following:</strong>
+        <ul>
+          <% errors.forEach(function (e) { %><li><%= e %></li><% }) %>
+        </ul>
+      </div>
+    <% } %>
+
+    <form action="/submit" method="POST">
+      <label for="name">Full name</label>
+      <input id="name" name="name" type="text" placeholder="Ajay Kumar" value="<%= values.name || '' %>" required />
+
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" placeholder="you@example.com" value="<%= values.email || '' %>" required />
+
+      <div class="row">
+        <div>
+          <label for="age">Age</label>
+          <input id="age" name="age" type="number" min="1" max="120" placeholder="24" value="<%= values.age || '' %>" required />
+        </div>
+        <div>
+          <label for="course">Course</label>
+          <select id="course" name="course" required>
+            <% ['', 'Docker & Kubernetes', 'DevOps Fundamentals', 'MERN Stack', 'Python Flask', 'Cloud Computing (AWS)'].forEach(function (c) { %>
+              <option value="<%= c %>" <%= (values.course === c || (!values.course && c === '')) ? 'selected' : '' %> <%= c === '' ? 'disabled' : '' %>><%= c === '' ? 'Select a course' : c %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+
+      <label for="message">Message <span class="muted">(optional)</span></label>
+      <textarea id="message" name="message" rows="3" placeholder="Anything you'd like us to know"><%= values.message || '' %></textarea>
+
+      <button type="submit">Submit</button>
+    </form>
+  </main>
+</body>
+</html>

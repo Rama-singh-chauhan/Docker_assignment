@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submitted | Express + Flask</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="card">
+    <header>
+      <span class="badge ok">Processed by Flask</span>
+      <h1>Submission received</h1>
+      <p class="sub"><%= message %></p>
+    </header>
+
+    <table>
+      <tr><th>Submission ID</th><td>#<%= data.id %></td></tr>
+      <tr><th>Name</th><td><%= data.name %></td></tr>
+      <tr><th>Email</th><td><%= data.email %></td></tr>
+      <tr><th>Age</th><td><%= data.age %></td></tr>
+      <tr><th>Course</th><td><%= data.course %></td></tr>
+      <tr><th>Message</th><td><%= data.message || '—' %></td></tr>
+      <tr><th>Received at</th><td><%= data.received_at %></td></tr>
+    </table>
+
+    <a class="button" href="/">Submit another response</a>
+  </main>
+</body>
+</html>
